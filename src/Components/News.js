@@ -18,14 +18,18 @@ export class News extends Component {
     category: PropTypes.string,
   }
 
-  constructor() {
-    super();
+    capitalizeFirstLetter=(string)=>{
+      return string.charAt(0).toUpperCase()+string.slice(1);
+    }
+  constructor(props) {
+    super(props);
     console.log("constructor calling");
     this.state={
       articles: [],
       loading: false,
       page:1
     }
+    document.title=`${this.capitalizeFirstLetter(this.props.category)}- NewsLive`;
   }
 
   async updateNews(){
@@ -42,15 +46,16 @@ export class News extends Component {
 
   async componentDidMount(){
     console.log("cdm");
-    const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=324ef4f138194642b74d8d5f4e342d88&page=1&pageSize=${this.props.pageSize}`;
-    this.setState({loading:true});
-    let data = await fetch(url);
-        let parsedData = await data.json()
-        console.log(parsedData); 
-        this.setState({articles: parsedData.articles,
-          totalResults: parsedData.totalResults,
-          loading:false
-        })
+    // const url=`https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=324ef4f138194642b74d8d5f4e342d88&page=1&pageSize=${this.props.pageSize}`;
+    // this.setState({loading:true});
+    // let data = await fetch(url);
+    //     let parsedData = await data.json()
+    //     console.log(parsedData); 
+    //     this.setState({articles: parsedData.articles,
+    //       totalResults: parsedData.totalResults,
+    //       loading:false
+    //     })
+    this.updateNews();
   }
 
  handlePrevClick= async()=>{
@@ -92,7 +97,7 @@ export class News extends Component {
     return (
       <div>
         <div className="container my-3">
-          <h1 className="text-center" style={{margin:'35px 0px'}}>News-Live - Top Headlines</h1>
+          <h1 className="text-center" style={{margin:'35px 0px'}}>News-Live - Top {this.capitalizeFirstLetter(this.props.category)} Headlines</h1>
          {this.state.loading && <Spinner/>}
           <div className="row">
             {!this.state.loading && this.state.articles.map((element) => {
